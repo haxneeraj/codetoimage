@@ -1,0 +1,263 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.hljs-theme-github-dark {
+  @import "highlight.js/styles/github-dark.css";
+}
+
+.hljs-theme-3024-day {
+  @import "highlight.js/styles/3024-day.css";
+}
+
+.hljs-theme-3024-night {
+  @import "highlight.js/styles/3024-night.css";
+}
+
+.hljs-theme-abbott {
+  @import "highlight.js/styles/abbott.css";
+}
+
+.hljs-theme-abcdef {
+  @import "highlight.js/styles/abcdef.css";
+}
+
+.hljs-theme-ambiance {
+  @import "highlight.js/styles/ambiance.css";
+}
+
+.hljs-theme-ayu-dark {
+  @import "highlight.js/styles/ayu-dark.css";
+}
+
+.hljs-theme-ayu-mirage {
+  @import "highlight.js/styles/ayu-mirage.css";
+}
+
+.hljs-theme-base16-dark {
+  @import "highlight.js/styles/base16-dark.css";
+}
+
+.hljs-theme-base16-light {
+  @import "highlight.js/styles/base16-light.css";
+}
+
+.hljs-theme-bespin {
+  @import "highlight.js/styles/bespin.css";
+}
+
+.hljs-theme-blackboard {
+  @import "highlight.js/styles/blackboard.css";
+}
+
+.hljs-theme-cobalt {
+  @import "highlight.js/styles/cobalt.css";
+}
+
+.hljs-theme-colorforth {
+  @import "highlight.js/styles/colorforth.css";
+}
+
+.hljs-theme-darcula {
+  @import "highlight.js/styles/darcula.css";
+}
+
+.hljs-theme-duotone-dark {
+  @import "highlight.js/styles/duotone-dark.css";
+}
+
+.hljs-theme-duotone-light {
+  @import "highlight.js/styles/duotone-light.css";
+}
+
+.hljs-theme-eclipse {
+  @import "highlight.js/styles/eclipse.css";
+}
+
+.hljs-theme-elegant {
+  @import "highlight.js/styles/elegant.css";
+}
+
+.hljs-theme-erlang-dark {
+  @import "highlight.js/styles/erlang-dark.css";
+}
+
+.hljs-theme-gruvbox-dark {
+  @import "highlight.js/styles/gruvbox-dark.css";
+}
+
+.hljs-theme-hopscotch {
+  @import "highlight.js/styles/hopscotch.css";
+}
+
+.hljs-theme-icecoder {
+  @import "highlight.js/styles/icecoder.css";
+}
+
+.hljs-theme-idea {
+  @import "highlight.js/styles/idea.css";
+}
+
+.hljs-theme-isotope {
+  @import "highlight.js/styles/isotope.css";
+}
+
+.hljs-theme-lesser-dark {
+  @import "highlight.js/styles/lesser-dark.css";
+}
+
+.hljs-theme-liquibyte {
+  @import "highlight.js/styles/liquibyte.css";
+}
+
+.hljs-theme-lucario {
+  @import "highlight.js/styles/lucario.css";
+}
+
+.hljs-theme-material-darker {
+  @import "highlight.js/styles/material-darker.css";
+}
+
+.hljs-theme-material-palenight {
+  @import "highlight.js/styles/material-palenight.css";
+}
+
+.hljs-theme-mbo {
+  @import "highlight.js/styles/mbo.css";
+}
+
+.hljs-theme-mdn-like {
+  @import "highlight.js/styles/mdn-like.css";
+}
+
+.hljs-theme-midnight {
+  @import "highlight.js/styles/midnight.css";
+}
+
+.hljs-theme-monokai {
+  @import "highlight.js/styles/monokai.css";
+}
+
+.hljs-theme-moxer {
+  @import "highlight.js/styles/moxer.css";
+}
+
+.hljs-theme-neat {
+  @import "highlight.js/styles/neat.css";
+}
+
+.hljs-theme-neo {
+  @import "highlight.js/styles/neo.css";
+}
+
+.hljs-theme-night {
+  @import "highlight.js/styles/night.css";
+}
+
+.hljs-theme-nord {
+  @import "highlight.js/styles/nord.css";
+}
+
+.hljs-theme-oceanic-next {
+  @import "highlight.js/styles/oceanic-next.css";
+}
+
+.hljs-theme-panda-syntax {
+  @import "highlight.js/styles/panda-syntax.css";
+}
+
+.hljs-theme-paraiso-dark {
+  @import "highlight.js/styles/paraiso-dark.css";
+}
+
+.hljs-theme-pastel-on-dark {
+  @import "highlight.js/styles/pastel-on-dark.css";
+}
+
+.hljs-theme-railscasts {
+  @import "highlight.js/styles/railscasts.css";
+}
+
+.hljs-theme-seti {
+  @import "highlight.js/styles/seti.css";
+}
+
+.hljs-theme-shadowfox {
+  @import "highlight.js/styles/shadowfox.css";
+}
+
+.hljs-theme-solarized {
+  @import "highlight.js/styles/solarized.css";
+}
+
+.hljs-theme-ssms {
+  @import "highlight.js/styles/ssms.css";
+}
+
+.hljs-theme-the-matrix {
+  @import "highlight.js/styles/the-matrix.css";
+}
+
+.hljs-theme-tomorrow-night-bright {
+  @import "highlight.js/styles/tomorrow-night-bright.css";
+}
+
+.hljs-theme-ttcn {
+  @import "highlight.js/styles/ttcn.css";
+}
+
+.hljs-theme-twilight {
+  @import "highlight.js/styles/twilight.css";
+}
+
+.hljs-theme-vibrant-ink {
+  @import "highlight.js/styles/vibrant-ink.css";
+}
+
+.hljs-theme-xq-dark {
+  @import "highlight.js/styles/xq-dark.css";
+}
+
+.hljs-theme-xq-light {
+  @import "highlight.js/styles/xq-light.css";
+}
+
+.hljs-theme-yeti {
+  @import "highlight.js/styles/yeti.css";
+}
+
+.hljs-theme-yonce {
+  @import "highlight.js/styles/yonce.css";
+}
+
+.hljs-theme-zenburn {
+  @import "highlight.js/styles/zenburn.css";
+}
+
+.cm-editor {
+  line-height: 1.5 !important;
+  padding: 8px !important;
+}
+
+.cm-activeLine {
+  position: relative !important;
+  z-index: 1 !important;
+}
