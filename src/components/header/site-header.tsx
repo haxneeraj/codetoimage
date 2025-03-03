@@ -87,33 +87,15 @@ export default function SiteHeader() {
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex shrink-0 items-center">
-              <img
-                alt="Your Company"
-                src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                className="h-8 w-auto"
-              />
-            </div>
-            {/* <div className="hidden sm:ml-6 sm:block">
-              <div className="flex space-x-4">
-                {navItems.map((item) => (
-                  <Link href={item.href} key={item.href}
-                    className={classNames(
-                      item.current ? 'bg-gray-900 dark:bg-gray-700 text-white' : 'text-gray-900 text-gray-900 dark:text-white hover:bg-gray-700 hover:text-white',
-                      'rounded-md px-3 py-2 text-sm font-medium',
-                    )}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-            </div> */}
+              <h1 className="text-2xl font-bold text-gray-100 dark:text-white">HaxNeeraj.in</h1>
+            </div>            
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <div className="flex space-x-5">
-              <a target='_blank' href="https://github.com/haxneeraj" className="text-gray-600 hover:text-black transition duration-300">
+              <a target='_blank' href="https://github.com/haxneeraj" className="text-gray-200 hover:text-gray-300 transition duration-300">
                 <Github className="h-6 w-6" aria-hidden="true" />
               </a>
-              <a target='_blank' href="https://x.com/hax_neeraj" className="text-blue-400 hover:text-blue-600 transition duration-300">
+              <a target='_blank' href="https://x.com/hax_neeraj" className="text-blue-600 hover:text-blue-800 transition duration-300">
                 <Twitter className="h-6 w-6" aria-hidden="true" />
               </a>
               <a target='_blank' href="https://www.linkedin.com/in/hax-neeraj/" className="text-blue-700 hover:text-blue-900 transition duration-300">

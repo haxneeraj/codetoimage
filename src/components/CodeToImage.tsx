@@ -80,8 +80,8 @@ export default function CodeToImage() {
     const [code, setCode] = useState("console.log('Hello, world!');");
     const [width, setWidth] = useState("600px");
     const [padding, setPadding] = useState("100px");
-    const [bgColor, setBgColor] = useState("#1e1e1e");
-    const [textColor, setTextColor] = useState("#ffffff");
+    const [bgColor, setBgColor] = useState("#ffffff");
+    const [textColor, setTextColor] = useState("#000000");
     const [fontSize, setFontSize] = useState("16px");
     const [__filename, set__filename] = useState("hello-world.js");
     const [dotsAlign, setDotsAlign] = useState<"left" | "right">("left");    
@@ -93,7 +93,6 @@ export default function CodeToImage() {
     const [showLineNumbers, setShowLineNumbers] = useState(true);
     
     const codeParentRef = useRef<HTMLDivElement>(null);
-    const codeRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
         loadLanguage("JavaScript");
@@ -140,7 +139,7 @@ export default function CodeToImage() {
         if (codeParentRef.current) {
             codeParentRef.current.style.padding = padding;
         }
-    }, [padding]);  
+    }, [padding]);    
     
     // Handle Image Selection
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -153,25 +152,60 @@ export default function CodeToImage() {
         reader.readAsDataURL(file);
         }
     };
-  
-  
 
-    const captureImage = async () => {
+    // show/hide line numbers
+    useEffect(() => {
+       const gutter = document.getElementsByClassName('cm-gutters')[0];       
+       if(showLineNumbers){
+          if(gutter){
+            gutter.classList.remove('hide-line-numbers'); 
+          }
+       }
+       else{
+          if(gutter){
+            gutter.classList.add('hide-line-numbers'); 
+          }
+       }
+    }, [showLineNumbers]);
+
+    const html2Image = async () => {
         const codeElement = document.getElementById("code-area");
-    
-        // Force highlight before capturing
-        document.querySelectorAll(".cm-activeLine").forEach((el) => {
-            (el as HTMLElement).style.background = "tranparent"; // Adjust to theme color
-        });
-    
-        if (codeElement) {
+        if (!codeElement) return null;
+        try {
+            // 🔹 Remove background from active line -> create a style element and after remove that
+            const style = document.createElement("style");
+            style.innerHTML = `
+                .cm-activeLine, .cm-activeLineGutter { background: transparent!important; padding-bottom: 0px!important; }
+                .branding-name { margin-top:-15px!important; }
+            `;
+            document.head.appendChild(style);
+
+            // 🔹 Delay to ensure styles are fully loaded
+            await new Promise((resolve) => setTimeout(resolve, 500));
+
+            // 🔹 Capture the image
             const canvas = await html2canvas(codeElement, {
                 backgroundColor: null,
                 useCORS: true,
+                scale: 2,  // High-quality rendering
+                allowTaint: true
             });
-            console.log("Canvass  ", canvas);
+
+            // 🔹 Remove temporary styles
+            document.head.removeChild(style);
     
+            // 🔹 Download Image
             const image = canvas.toDataURL("image/png");
+            return image;
+        } catch (error) {
+            console.error("Error capturing image:", error);
+            return null;
+        }
+    };
+
+    const captureImage = async () => {
+        const image = await html2Image();
+        if (image) {
             const link = document.createElement("a");
             link.href = image;
             link.download = "code-image.png";
@@ -180,13 +214,14 @@ export default function CodeToImage() {
     };
     
     
+    
 
     return (
-        <div className="flex gap-1">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-4 mt-20">
             {/* Sidebar Options */}
-            <div className="w-1/3 p-5 pt-10 pb-10 bg-gray-900 rounded-md shadow-lg text-gray-400 text-left">
+            <div className="w-full md:w-1/3 p-5 pt-10 pb-10 bg-gray-900 rounded-md shadow-lg text-gray-400 text-left">
                 <div className="flex flex-col gap-3">
-                    <div className="flex gap-3">
+                    <div className="flex flex-col sm:flex-row gap-3">
                         <div className="flex-1">
                             <label className="text-sm">Theme</label>
                             <select                                    
@@ -218,7 +253,7 @@ export default function CodeToImage() {
                         
                         </div>
                     </div>
-                    <div className="flex gap-3 mt-3">
+                    <div className="flex flex-col sm:flex-row gap-3 mt-3">
                         <div className="flex-1">            
                             <label className="text-sm">Background Color</label>
                             <input
@@ -236,10 +271,10 @@ export default function CodeToImage() {
                             />
                         </div>
                     </div>
-                    <div className="flex gap-2 mt-3">
+                    <div className="flex flex-col sm:flex-row gap-3 mt-3">
                         <div className="flex-2">            
                             <label className="text-sm">Width</label>
-                            <div className="relative w-full max-w-[120px]">
+                            <div className="relative w-full max-w-full md:max-w-[120px]">
                                 <input
                                     type="text"
                                     value={width.replace("px", "")}
@@ -253,7 +288,7 @@ export default function CodeToImage() {
                         </div>
                         <div className="flex-2">            
                             <label className="text-sm">Padding</label>
-                            <div className="relative w-full max-w-[120px]">
+                            <div className="relative w-full max-w-full md:max-w-[120px]">
                                 <input
                                     type="text"
                                     value={padding.replace("px", "")}
@@ -276,7 +311,7 @@ export default function CodeToImage() {
                         </div>                            
                     </div>
 
-                    <div className="flex gap-3 mt-3">
+                    <div className="flex flex-col sm:flex-row gap-3 mt-3">
                         <div className="flex-1">            
                             <label className="text-sm">File Name</label>
                             <input
@@ -288,12 +323,12 @@ export default function CodeToImage() {
                         </div>
                     </div>
 
-                    <div className="flex gap-2 mt-3">
+                    <div className="flex flex-col sm:flex-row gap-3 mt-3">
                         <div className="flex-1">
                             <label className="text-sm">Dots Align</label>
                             <div className="flex items-center">           
                                 <button
-                                    className={`px-4 py-2 border border-gray-300 flex items-center ${
+                                    className={`px-4 py-2 border border-gray-300 flex items-center w-full ${
                                         dotsAlign === "left" ? "bg-gray-700 text-gray-300" : "text-gray-600"
                                     }`}
                                     onClick={() => setDotsAlign("left")}
@@ -302,7 +337,7 @@ export default function CodeToImage() {
                                     Left
                                 </button>
                                 <button
-                                    className={`px-4 py-2 border border-gray-300 flex items-center ${
+                                    className={`px-4 py-2 border border-gray-300 flex items-center w-full ${
                                         dotsAlign === "right" ? "bg-gray-700 text-gray-300" : "text-gray-600"
                                     }`}
                                     onClick={() => setDotsAlign("right")}
@@ -316,7 +351,7 @@ export default function CodeToImage() {
                             <label className="text-sm">Line Numbers</label> 
                             <div className="flex items-center">         
                                 <button
-                                    className={`px-4 py-2 border border-gray-300 flex items-center ${
+                                    className={`px-4 py-2 border border-gray-300 flex items-center w-full ${
                                         showLineNumbers === true ? "bg-gray-700 text-gray-300" : "text-gray-600"
                                     }`}
                                     onClick={() => setShowLineNumbers(true)}
@@ -325,7 +360,7 @@ export default function CodeToImage() {
                                     Show
                                 </button>
                                 <button
-                                    className={`px-4 py-2 border border-gray-300 flex items-center ${
+                                    className={`px-4 py-2 border border-gray-300 flex items-center w-full ${
                                         showLineNumbers === false ? "bg-gray-700 text-gray-300" : "text-gray-600"
                                     }`}
                                     onClick={() => setShowLineNumbers(false)}
@@ -336,7 +371,7 @@ export default function CodeToImage() {
                             </div>
                         </div>
                     </div>
-                    <div className="flex gap-3 mt-3">
+                    <div className="flex flex-col sm:flex-row gap-3 mt-3">
                         <div className="flex-1">            
                             <label className="text-sm">Branding Name</label>
                             <input
@@ -357,12 +392,12 @@ export default function CodeToImage() {
                         </div>
                     </div>
 
-                    <div className="flex gap-2 mt-3">                            
+                    <div className="flex flex-col sm:flex-row gap-3 mt-3">                         
                         <div className="flex-1">  
                             <label className="text-sm">Branding</label> 
                             <div className="flex items-center">         
                                 <button
-                                    className={`px-4 py-2 border border-gray-300 flex items-center ${
+                                    className={`px-4 py-2 border border-gray-300 flex items-center w-full ${
                                         showBranding === true ? "bg-gray-700 text-gray-300" : "text-gray-600"
                                     }`}
                                     onClick={() => setShowBranding(true)}
@@ -371,7 +406,7 @@ export default function CodeToImage() {
                                     Show
                                 </button>
                                 <button
-                                    className={`px-4 py-2 border border-gray-300 flex items-center ${
+                                    className={`px-4 py-2 border border-gray-300 flex items-center w-full ${
                                         showBranding === false ? "bg-gray-700 text-gray-300" : "text-gray-600"
                                     }`}
                                     onClick={() => setShowBranding(false)}
@@ -384,7 +419,7 @@ export default function CodeToImage() {
                         <div className="flex-1">  
                             <label className="text-sm">Select Logo</label> 
                             <button 
-                            className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-md shadow hover:bg-green-600"
+                            className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-md shadow hover:bg-green-600 w-full"
                             onClick={() => document.getElementById("fileInput")?.click()}
                             >
                                 <PhotoIcon className="w-5 h-5" />
@@ -404,81 +439,86 @@ export default function CodeToImage() {
             </div>
         
             {/* Code Preview */}
-            <div className="flex flex-col items-center w-2/3">
-            <div
-                id="code-area"
-                className="p-10 shadow-lg flex justify-center items-center relative overflow-hidden"
-                ref={codeParentRef}
-                style={{
-                    backgroundColor: bgColor,
-                    minWidth: "720px",
-                    width: width,
-                    maxWidth: "920px",
-                    padding: padding,
-                    margin: 0,
-                    border: "none",
-                }}
-            >
+            <div className="flex flex-col items-center w-full md:w-2/3">
+                <div className="flex flex-col items-center w-full px-4 md:px-0 relative overflow-x-scroll md:overflow-hidden">
                     <div
-                    className="p-3 rounded-lg relative w-auto h-auto"
-                    style={{ backgroundColor: themeBgColor }}
-                    >   
-                        <div className={`flex ${dotsAlign === "left" ? "justify-between" : "flex-row-reverse justify-between"} items-center mb-2`}>
-                            <div className="flex gap-1">
-                                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                        id="code-area"
+                        className="p-5 sm:p-10 shadow-lg flex justify-center items-center relative w-full"
+                        ref={codeParentRef}
+                        style={{
+                            backgroundColor: bgColor,
+                            minWidth: "720px",
+                            width: width,
+                            maxWidth: "920px",
+                            padding: padding,
+                            margin: 0,
+                            border: "none",
+                        }}
+                    >
+                        <div
+                            className="p-3 rounded-lg relative w-auto h-auto text-left"
+                            style={{ backgroundColor: themeBgColor }}
+                        >   
+                            <div className={`flex ${dotsAlign === "left" ? "justify-between" : "flex-row-reverse justify-between"} items-center mb-2`}>
+                                <div className="flex gap-1">
+                                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                                </div>
+                                <span className="text-sm text-gray-400">{__filename}</span>
                             </div>
-                            <span className="text-sm text-gray-400">{__filename}</span>
+                            {/* Code Block with Line Numbers */}
+                            <CodeMirror
+                                value={code}
+                                height="auto"
+                                width="auto"
+                                theme={theme}
+                                extensions={[
+                                    myTheme,
+                                    language ? [language] : [],                                    
+                                    EditorView.lineWrapping,
+                                    showLineNumbers ? [    
+                                        lineNumbers(),
+                                        gutter({class: "cm-mygutter"}),
+                                    ] : [],
+                                ]}
+                                onChange={(value) => setCode(value)}
+                                style={{
+                                    minHeight: "100px",
+                                    lineHeight: "1.5",
+                                }}
+                            />
                         </div>
-                        {/* Code Block with Line Numbers */}
-                        <CodeMirror
-                            value={code}
-                            height="auto"
-                            width="auto"
-                            theme={theme}
-                            extensions={[
-                                myTheme,
-                                language ? [language] : [],
-                                EditorView.lineWrapping,
-                                showLineNumbers ? [
-                                    lineNumbers(),
-                                    gutter({class: "cm-mygutter"}),
-                                ] : [],
-                            ]}
-                            onChange={(value) => setCode(value)}
-                            style={{
-                                minHeight: "100px",
-                                lineHeight: "1.5",
-                            }}
-                        />
-                    </div>
-                    {/* Branding */}
-                    {showBranding && (
-                        <div className="absolute bottom-10 right-auto text-sm" style={{ color: textColor }}>
-                            <div className="flex items-center gap-2">
-                                {/* Avatar */}
-                                <img
-                                    src={image || "https://avatars.githubusercontent.com/u/4723117?v=4"}
-                                    className="w-8 h-8 rounded-full"
-                                    alt="Avatar"
-                                />
-                                
-                                {/* Branding Name */}
-                                <span
-                                    className="text-sm"
-                                    style={{ color: textColor }}
-                                >
-                                    {brandingName}
-                                </span>
+                        {/* Branding */}
+                        {showBranding && (
+                            <div className="absolute bottom-10 right-auto text-sm" style={{ color: textColor }}>
+                                <div className="flex items-center gap-2">
+                                    {/* Avatar */}
+                                    <img
+                                        src={image || "https://avatars.githubusercontent.com/u/4723117?v=4"}
+                                        className="w-8 h-8 rounded-full"
+                                        alt="Avatar"
+                                    />
+                                    
+                                    {/* Branding Name */}
+                                    <span
+                                        className="text-sm branding-name"
+                                        style={{ color: textColor }}
+                                    >
+                                        {brandingName}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    )}
-                    
-                </div>                    
-                <button className="mt-4 px-4 py-2 bg-gray-700 text-gray-300 rounded flex justify-center gap-1" onClick={captureImage}>
-                    <CloudArrowDownIcon className="w-6 h-6"/> Download Image
-                </button>
+                        )}
+                        
+                    </div>         
+                </div>
+                {/* Download Button */}
+                <div className="flex justify-center mt-4">
+                    <button className="mt-4 px-4 py-2 bg-gray-700 text-gray-300 rounded flex justify-center gap-1" onClick={captureImage}>
+                        <CloudArrowDownIcon className="w-6 h-6"/> Download Image
+                    </button>
+                </div>
             </div>
         </div>
       );

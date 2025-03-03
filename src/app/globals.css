@@ -261,3 +261,11 @@ body {
   position: relative !important;
   z-index: 1 !important;
 }
+
+.hide-dynamic-elements .cm-layer.cm-layer-above.cm-cursorLayer {
+  display: none;
+}
+
+.hide-line-numbers {
+  display: none !important;
+}
