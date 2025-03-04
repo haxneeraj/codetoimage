@@ -217,7 +217,7 @@ export default function CodeToImage() {
     
 
     return (
-        <div className="flex flex-col md:flex-row gap-2 md:gap-4 mt-20">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-4 mt-20 w-full">
             {/* Sidebar Options */}
             <div className="w-full md:w-1/3 p-5 pt-10 pb-10 bg-gray-900 rounded-md shadow-lg text-gray-400 text-left">
                 <div className="flex flex-col gap-3">
